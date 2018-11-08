@@ -8,6 +8,14 @@ function changePage(one, from_ids, to_id) {
   if(from_ids.indexOf(one.symbolId) > -1) {
     one.symbolId = to_id;
   }
+  if(from_ids.indexOf(one.value) > -1) {
+    one.value = to_id;
+  }
+  if(from_ids.indexOf(one.value) > -1) {
+    one.value = to_id;
+  }
+  one.affectedLayer && changePage(one.affectedLayer, from_ids, to_id)
+  one.overrides && one.overrides.forEach(y => changePage(y, from_ids, to_id))
   one.layers && one.layers.forEach(y => changePage(y, from_ids, to_id))
 }
 
@@ -55,6 +63,9 @@ export default function(context) {
       try{
         let document = dom.getSelectedDocument();
         document.pages.forEach(x => {
+  // UI.alert('page', JSON.stringify(x))
+  // UI.alert('selected', JSON.stringify(selected))
+  // UI.alert('otherIds', JSON.stringify(otherIds))
           changePage(x, otherIds, selected.symbolId);
         })
       }catch(e){
