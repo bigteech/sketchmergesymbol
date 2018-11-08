@@ -7,7 +7,6 @@ function changePage(one, from_ids, to_id) {
   let document = dom.getSelectedDocument();
   if(from_ids.indexOf(one.symbolId) > -1) {
     one.symbolId = to_id;
-    UI.alert('INFO', 'ha')
   }
   one.layers && one.layers.forEach(y => changePage(y, from_ids, to_id))
 }
@@ -43,12 +42,9 @@ export default function(context) {
           index2++;
           return;
         }
+        
         otherIds.push(x.symbolId);
         try {
-          var copy = selected.duplicate();
-          copy.parent = x.parent;
-          copy.frame.x = x.frame.x;
-          copy.frame.y = x.frame.y,
           x.parent = null;
         }catch(e){
             UI.alert('error', e.toString())
