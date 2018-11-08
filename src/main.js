@@ -1,6 +1,16 @@
 const sketch = require('sketch')
 var ui = require('./ui')
 var UI = require('sketch/ui')
+var dom = require('sketch/dom')
+
+function changePage(one, from_ids, to_id) {
+  let document = dom.getSelectedDocument();
+  if(from_ids.indexOf(one.symbolId) > -1) {
+    one.symbolId = to_id;
+    UI.alert('INFO', 'ha')
+  }
+  one.layers && one.layers.forEach(y => changePage(y, from_ids, to_id))
+}
 
 export default function(context) {
   const document = sketch.fromNative(context.document)
@@ -27,11 +37,13 @@ export default function(context) {
         index++;
       })
       let index2 = 0;
+      let otherIds = [];
       selection.forEach(x => {
         if (index2 === selectedIndex) {
           index2++;
           return;
         }
+        otherIds.push(x.symbolId);
         try {
           var copy = selected.duplicate();
           copy.parent = x.parent;
@@ -43,5 +55,14 @@ export default function(context) {
         }
         index2++;
       })
+
+      try{
+        let document = dom.getSelectedDocument();
+        document.pages.forEach(x => {
+          changePage(x, otherIds, selected.symbolId);
+        })
+      }catch(e){
+        UI.alert('error',e.toString());
+      }
   }
 }
